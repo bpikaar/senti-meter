@@ -80,7 +80,7 @@ function startWebcam() {
         // )
         // Prefer camera resolution nearest to 1280x720.
         const constraints = {
-            audio: true,
+            audio: false,
             video: { width: width, height: height }
         };
 
