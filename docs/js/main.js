@@ -7,15 +7,15 @@ const video = document.querySelector("#video")
 const startBtn = document.querySelector("button")
 
 // Fix for iOS Safari from https://leemartin.dev/hello-webrtc-on-safari-11-e8bcb5335295
-video.setAttribute('autoplay', '');
-video.setAttribute('muted', '');
+video.setAttribute('autoplay', '')
+video.setAttribute('muted', '')
 video.setAttribute('playsinline', '')
 
-const width = 640;
-const height = 480;
-// const width = 1280;
-// const height = 720;
-let canvas, ctx;
+// const width = 640
+// const height = 480
+const width = 1280
+const height = 720
+let canvas, ctx
 let sentiment = "neutral"
 
 let initialized = false
@@ -23,20 +23,20 @@ let initialized = false
 const detectionOptions = {
     withLandmarks: true,
     withDescriptors: true
-};
+}
 // Initialize the magicFeature
-const faceapi = ml5.faceApi(detectionOptions, modelLoaded);
+const faceapi = ml5.faceApi(detectionOptions, modelLoaded)
 
 // When the model is loaded
 function modelLoaded() {
-    console.log('Model Loaded!');
+    console.log('Model Loaded!')
     console.log(faceapi)
     // Make some sparkles
-    canvas = createCanvas(width, height);
-    ctx = canvas.getContext("2d");
+    canvas = createCanvas(width, height)
+    ctx = canvas.getContext("2d")
     // flip de context horizontally
-    ctx.translate(width, 0);
-    ctx.scale(-1, 1);
+    ctx.translate(width, 0)
+    ctx.scale(-1, 1)
 
     initApplication()
 }
@@ -62,17 +62,17 @@ function startWebcam() {
         //         video: { facingMode: 'user' }
         //     },
         //     stream => {
-        //         initialized = true;
-        //         // video.srcObject = stream;
+        //         initialized = true
+        //         // video.srcObject = stream
         //         if ('srcObject' in video) {
-        //             video.srcObject = stream;
+        //             video.srcObject = stream
         //         } else {
-        //             video.src = URL.createObjectURL(stream);
+        //             video.src = URL.createObjectURL(stream)
         //         }
 
         //         // flip video
-        //         video.style.webkitTransform = "scaleX(-1)";
-        //         video.style.transform = "scaleX(-1)";
+        //         video.style.webkitTransform = "scaleX(-1)"
+        //         video.style.transform = "scaleX(-1)"
         //         // video.play()
         //         requestAnimationFrame(loop)
         //     },
@@ -81,27 +81,27 @@ function startWebcam() {
         // Prefer camera resolution nearest to 1280x720.
         const constraints = {
             audio: false,
-            video: { width: width, height: height }
-        };
+            video: { width: width, height: height, facingMode: 'user' }
+        }
 
         navigator.mediaDevices.getUserMedia(constraints)
             .then((mediaStream) => {
-                initialized = true;
-                // const video = document.querySelector('video');
+                initialized = true
+                // const video = document.querySelector('video')
                 if ('srcObject' in video) {
-                    video.srcObject = mediaStream;
+                    video.srcObject = mediaStream
                 } else {
-                    video.src = URL.createObjectURL(mediaStream);
+                    video.src = URL.createObjectURL(mediaStream)
                 }
                 video.onloadedmetadata = () => {
-                    video.play();
-                };
+                    video.play()
+                }
                 requestAnimationFrame(loop)
             })
             .catch((err) => {
                 // always check for errors at the end.
-                console.error(`${err.name}: ${err.message}`);
-            });
+                console.error(`${err.name}: ${err.message}`)
+            })
     }
 }
 
@@ -112,82 +112,82 @@ function loop() {
 
 function gotResults(err, result) {
     if (err) {
-        console.log(err);
-        return;
+        console.log(err)
+        return
     }
 
     // console.log(result)
-    let detections = result;
+    let detections = result
 
     // Clear part of the canvas
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "#000000"
+    ctx.fillRect(0, 0, width, height)
 
-    ctx.drawImage(video, 0, 0, width, height);
+    ctx.drawImage(video, 0, 0, width, height)
 
     if (detections) {
         if (detections.length > 0) {
-            drawBox(detections);
-            drawLandmarks(detections);
+            drawBox(detections)
+            drawLandmarks(detections)
         }
     }
 }
 
 function drawBox(detections) {
     for (let i = 0; i < detections.length; i += 1) {
-        const alignedRect = detections[i].alignedRect;
-        const x = alignedRect._box._x;
-        const y = alignedRect._box._y;
-        const boxWidth = alignedRect._box._width;
-        const boxHeight = alignedRect._box._height;
+        const alignedRect = detections[i].alignedRect
+        const x = alignedRect._box._x
+        const y = alignedRect._box._y
+        const boxWidth = alignedRect._box._width
+        const boxHeight = alignedRect._box._height
 
-        ctx.beginPath();
-        ctx.rect(x, y, boxWidth, boxHeight);
-        ctx.strokeStyle = "#a15ffb";
-        ctx.stroke();
-        ctx.closePath();
+        ctx.beginPath()
+        ctx.rect(x, y, boxWidth, boxHeight)
+        ctx.strokeStyle = "#a15ffb"
+        ctx.stroke()
+        ctx.closePath()
     }
 }
 
 function drawLandmarks(detections) {
     for (let i = 0; i < detections.length; i += 1) {
-        const mouth = detections[i].parts.mouth;
-        const nose = detections[i].parts.nose;
-        const leftEye = detections[i].parts.leftEye;
-        const rightEye = detections[i].parts.rightEye;
-        const rightEyeBrow = detections[i].parts.rightEyeBrow;
-        const leftEyeBrow = detections[i].parts.leftEyeBrow;
+        const mouth = detections[i].parts.mouth
+        const nose = detections[i].parts.nose
+        const leftEye = detections[i].parts.leftEye
+        const rightEye = detections[i].parts.rightEye
+        const rightEyeBrow = detections[i].parts.rightEyeBrow
+        const leftEyeBrow = detections[i].parts.leftEyeBrow
 
         checkSentiment(mouth)
-        drawPart(mouth, true, getSentimentColor(mouth));
-        // drawPart(nose, false);
-        // drawPart(leftEye, true);
-        // drawPart(rightEye, true);
-        // drawPart(leftEyeBrow, false);
-        // drawPart(rightEyeBrow, false);
+        drawPart(mouth, true, getSentimentColor(mouth))
+        // drawPart(nose, false)
+        // drawPart(leftEye, true)
+        // drawPart(rightEye, true)
+        // drawPart(leftEyeBrow, false)
+        // drawPart(rightEyeBrow, false)
     }
 }
 
 function drawPart(feature, closed, color = blue) {
-    ctx.beginPath();
+    ctx.beginPath()
     for (let i = 0; i < feature.length; i += 1) {
-        const x = feature[i]._x;
-        const y = feature[i]._y;
+        const x = feature[i]._x
+        const y = feature[i]._y
 
         // show number of point
-        // ctx.fillText(i, feature[i]._x, feature[i]._y);
+        // ctx.fillText(i, feature[i]._x, feature[i]._y)
 
         if (i === 0) {
-            ctx.moveTo(x, y);
+            ctx.moveTo(x, y)
         } else {
-            ctx.lineTo(x, y);
+            ctx.lineTo(x, y)
         }
     }
 
     if (closed === true) {
-        ctx.closePath();
+        ctx.closePath()
     }
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = color
     ctx.stroke()
     // console.log(canvas.toDataURL())
 }
@@ -211,12 +211,12 @@ function checkSentiment(facePart) {
 
 // Helper Functions
 function createCanvas(w, h) {
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    canvas.style.position = "absolute";
+    const canvas = document.createElement("canvas")
+    canvas.width = w
+    canvas.height = h
+    canvas.style.position = "absolute"
 
-    document.querySelector(".video-wrapper").appendChild(canvas);
-    // document.body.appendChild(canvas);
-    return canvas;
+    document.querySelector(".video-wrapper").appendChild(canvas)
+    // document.body.appendChild(canvas)
+    return canvas
 }
