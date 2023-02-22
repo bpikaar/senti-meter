@@ -1,0 +1,15 @@
+{
+  "name": "hunting-game-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/socket-server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^4.6.1"
+  }
+}

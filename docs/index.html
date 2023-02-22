@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+        crossorigin="anonymous"></script>
+    <script defer src="./js/main.js" type="module"></script>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Code voorbeeld ML5</title>
+</head>
+
+<body>
+    <div id="add-player">
+        <div>
+            <label for="player-name">Player name</label>
+            <input id="player-name" type="text" placeholder="Your player name" />
+        </div>
+        <error style="display: none">
+            <span style="color: red;">Please enter a player name</span>
+        </error>
+        <div>
+            <button>Add Player</button>
+        </div>
+    </div>
+    <div id="player-info" style="display: none">
+        <h2></h2>
+    </div>
+
+    <h3 id="players-sentiment">Percentage of happiness</h3>
+    <h2 id="sentiment">Your mood is neutral</h2>
+
+    <div class="video-wrapper">
+        <video id="video" width="640" height="480" autoplay muted></video>
+    </div>
+</body>
+
+</html>
