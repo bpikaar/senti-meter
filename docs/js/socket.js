@@ -1,7 +1,7 @@
 export default class Socket {
     constructor() {
-        // this.host = "http://145.24.222.135:8000"
-        this.host = "localhost:8000"
+        this.host = "http://145.24.222.135:8000"
+        // this.host = "localhost:8000"
 
         this.addPlayerElement = document.querySelector("#add-player")
         this.playerInfo = document.querySelector("#player-info")
