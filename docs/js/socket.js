@@ -1,6 +1,6 @@
 export default class Socket {
     constructor() {
-        this.host = "http://145.24.222.135:8000"
+        this.host = "https://sandbox.cmgt.hr.nl:8000"
         // this.host = "localhost:8000"
 
         this.addPlayerElement = document.querySelector("#add-player")
@@ -56,12 +56,3 @@ export default class Socket {
         })
     }
 }
-
-
-
-
-
-
-
-
-

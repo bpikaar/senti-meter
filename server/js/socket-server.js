@@ -1,11 +1,12 @@
 console.log("Starting socket server")
 // import http and socket.io
-import { createServer } from "http"
+import { createServer } from "https"
 import { Server } from "socket.io"
+import { readFileSync } from "fs"
 import Player from "./player.js"
 
-// const host = "145.24.222.135"
-const host = "localhost"
+const host = "sandbox.cmgt.hr.nl"
+// const host = "localhost"
 const serverPort = 8000
 const clientHost = "http://localhost"
 let percentageHappy = 0
@@ -15,14 +16,17 @@ let players = []
 // console.log(player.name)
 
 console.log("Creating server")
-const httpServer = createServer((req, res) => {
+const httpsServer = createServer({
+    key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
+    cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
+}, (req, res) => {
     console.log("Server created")
     res.writeHead(200)
     res.end("My first server!")
 })
 
 console.log("Creating socket server")
-const io = new Server(httpServer, {
+const io = new Server(httpsServer, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
@@ -70,7 +74,7 @@ io.on("connection", (socket) => {
 })
 
 console.log("Listening on port " + serverPort + "")
-httpServer.listen(serverPort, host, () => {
+httpsServer.listen(serverPort, host, () => {
     console.log("Server listening on port " + serverPort + "")
 })
 
