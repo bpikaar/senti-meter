@@ -1,32 +1,40 @@
 console.log("Starting socket server")
+const DEBUG = false
 // import http and socket.io
-import { createServer } from "https"
+import { createServer } from "http"
+import { createServer as createSecureServer } from "https"
 import { Server } from "socket.io"
 import { readFileSync } from "fs"
-import Player from "./player.js"
+import Client from "./client.js"
 
-const host = "sandbox.cmgt.hr.nl"
-// const host = "localhost"
+const host = DEBUG ? "localhost" : "sandbox.cmgt.hr.nl"
 const serverPort = 8000
-const clientHost = "http://localhost"
+let server = null
 let percentageHappy = 0
 
-let players = []
-// const player = new Player("test")
-// console.log(player.name)
+let clients = []
 
-console.log("Creating server")
-const httpsServer = createServer({
-    key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
-    cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
-}, (req, res) => {
-    console.log("Server created")
-    res.writeHead(200)
-    res.end("My first server!")
-})
+if (DEBUG) {
+    console.log("Creating server")
+    server = createServer({}, (req, res) => {
+        console.log("Server created")
+        res.writeHead(200)
+        res.end("My first server!")
+    })
+} else {
+    console.log("Creating secure server")
+    server = createSecureServer({
+        key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
+        cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
+    }, (req, res) => {
+        console.log("Secure Server created")
+        res.writeHead(200)
+        res.end("My first server!")
+    })
+}
 
 console.log("Creating socket server")
-const io = new Server(httpsServer, {
+const io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
@@ -39,60 +47,65 @@ io.on("connection", (socket) => {
     console.log(socket.id)
 
     //TODO do not use socket.id https://socket.io/docs/v4/troubleshooting-connection-issues/#usage-of-the-socketid-attribute
-    // receive "new player" event and add player to players array
-    socket.on("new player", (player, callback) => {
-        players.push(new Player(
-            player.id,
-            player.name))
+    // receive "new client" event and add client to clients array
+    socket.on("new client", (clientName, callback) => {
+        clients.push(new Client(socket.id, clientName))
+
         callback({
-            message: `Player ${player.name} added.`
+            message: `Client ${clientName} added.`
         })
-        console.log(players)
-        startUpdatePlayers(socket)
+        console.log(clients)
+        startUpdateClients(socket)
     })
 
-    // receive "new sentiment" event and add player to players array
-    socket.on("sentiment", (id, sentiment, callback) => {
-        // get player based on id and update sentiment
-        if (players.map(player => player.id).indexOf(id) !== -1) {
-            players[players.map(player => player.id).indexOf(id)].sentiment = sentiment
+    // receive "new sentiment" event and update sentiment of client in clients array
+    socket.on("sentiment", (sentiment) => {
+        // get client based on socket and update sentiment
+        if (clients.length > 0) {
+            let client = clients[clients.map(client => client.id).indexOf(socket.id)]
+            if (client) {
+                client.sentiment = sentiment
+            }
         }
-        // callback({
-        //     message: `Player found.`
-        // })
-        console.log(players)
     })
-
-    // receive "found picture" event from client and send response in callback
-    socket.on("found picture", (arg1, callback) => {
-        console.log(arg1) // { name: "updated" }
-        callback({
-            status: "ok"
-        })
-    })
+    // on disconnect, remove client from clients array
+    socket.on("disconnect", () => disconnectClient(socket))
 
 })
 
 console.log("Listening on port " + serverPort + "")
-httpsServer.listen(serverPort, host, () => {
+server.listen(serverPort, host, () => {
     console.log("Server listening on port " + serverPort + "")
 })
 
-function startUpdatePlayers(socket) {
+function startUpdateClients(socket) {
     // send "update" event to client every 500ms
-    if (players.length > 0) {
+    if (clients.length > 0) {
         setInterval(() => {
-            let people = players.length == 1 ? "1 person" : players.length + " people"
-            socket.emit("update", `${(percentageHappy * 100).toFixed(0)} % is happy (${people} joined)`)
-            updatePlayers()
+            socket.emit("update", `${(percentageHappy * 100).toFixed(0)}%`, clients.map(client => client.toJson()))
+            console.log(clients.length + " clients connected")
+            updateClients()
         }, 500)
     }
 }
 
-function updatePlayers() {
-    // calculate percentage of happy players
-    percentageHappy = players.filter(player =>
-        player.sentiment === "happy").length / players.length
-    console.log(players.filter(player => player.sentiment === "happy").length)
+function updateClients() {
+    if (clients.length !== 0) {
+        // calculate percentage of happy clients
+        percentageHappy = clients.filter(client =>
+            client.sentiment === "happy").length / clients.length
+        console.log(clients.filter(client => client.sentiment === "happy").length)
+    } else { percentageHappy = 0 }
+
     console.log(percentageHappy * 100 + "% happy")
+}
+
+/**
+ * disconnect the client from the server based on socket
+ */
+function disconnectClient(socket) {
+    // remove client from clients array
+    clients = clients.filter(client => client.id !== socket.id)
+    console.log("Client disconnected")
+    console.log(clients)
 }

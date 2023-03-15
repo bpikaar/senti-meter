@@ -2,32 +2,45 @@ import Socket from "./socket.js"
 
 const socket = new Socket()
 
-const log = document.querySelector("#array")
 const video = document.querySelector("#video")
-const startBtn = document.querySelector("button")
+const videoWrapper = document.querySelector("#video-wrapper")
+const userEmoji = document.querySelector("#useremoji")
+const userName = document.querySelector("#username")
+const loginView = document.querySelector("#login")
+const userView = document.querySelector("#user")
+const students = document.querySelector("students")
+const emoji = ["😃", "😡"]
 
 // Fix for iOS Safari from https://leemartin.dev/hello-webrtc-on-safari-11-e8bcb5335295
 video.setAttribute('autoplay', '')
 video.setAttribute('muted', '')
 video.setAttribute('playsinline', '')
 
-// const width = 640
-// const height = 480
-const width = 1280
-const height = 720
-let canvas, ctx
+const width = 320
+const height = 240
+// const width = 1280
+// const height = 720
+let canvas, ctx, faceapi
 let sentiment = "neutral"
-
 let initialized = false
 
-const detectionOptions = {
-    withLandmarks: true,
-    withDescriptors: true
-}
-// Initialize the magicFeature
-const faceapi = ml5.faceApi(detectionOptions, modelLoaded)
+document.querySelector("form").addEventListener("submit", (e) => addClientToServer(e))
+document.addEventListener("updateClients", (event) => updateClientList(event.clients))
 
-// When the model is loaded
+function startFaceAPI() {
+    const detectionOptions = {
+        withLandmarks: true,
+        // withDescriptors: true,
+        // withExpressions: true, deprecated https://github.com/ml5js/ml5-library/issues/597
+    }
+
+    faceapi = ml5.faceApi(detectionOptions, modelLoaded)
+}
+
+
+/**
+ * start de app - aangeroepen onderin dit document
+ */
 function modelLoaded() {
     console.log('Model Loaded!')
     console.log(faceapi)
@@ -38,46 +51,14 @@ function modelLoaded() {
     ctx.translate(width, 0)
     ctx.scale(-1, 1)
 
-    initApplication()
-}
-//
-// start de app - aangeroepen onderin dit document
-//
-function initApplication() {
-    Notification.requestPermission()
-    new Notification("Starting the app")
-
     startWebcam()
 }
 
-//
-// function to read the webcam
-//
+/**
+ * function to read the webcam
+ */
 function startWebcam() {
     if (!initialized) {
-        // console.log(navigator.getUserMedia())
-        // navigator.getUserMedia(
-        //     {
-        //         audio: false,
-        //         video: { facingMode: 'user' }
-        //     },
-        //     stream => {
-        //         initialized = true
-        //         // video.srcObject = stream
-        //         if ('srcObject' in video) {
-        //             video.srcObject = stream
-        //         } else {
-        //             video.src = URL.createObjectURL(stream)
-        //         }
-
-        //         // flip video
-        //         video.style.webkitTransform = "scaleX(-1)"
-        //         video.style.transform = "scaleX(-1)"
-        //         // video.play()
-        //         requestAnimationFrame(loop)
-        //     },
-        //     err => console.error(err)
-        // )
         // Prefer camera resolution nearest to 1280x720.
         const constraints = {
             audio: false,
@@ -87,7 +68,6 @@ function startWebcam() {
         navigator.mediaDevices.getUserMedia(constraints)
             .then((mediaStream) => {
                 initialized = true
-                // const video = document.querySelector('video')
                 if ('srcObject' in video) {
                     video.srcObject = mediaStream
                 } else {
@@ -95,8 +75,8 @@ function startWebcam() {
                 }
                 video.onloadedmetadata = () => {
                     video.play()
+                    requestAnimationFrame(loop)
                 }
-                requestAnimationFrame(loop)
             })
             .catch((err) => {
                 // always check for errors at the end.
@@ -105,14 +85,14 @@ function startWebcam() {
     }
 }
 
-function loop() {
+function loop(timestamp) {
     faceapi.detect(video, gotResults)
-    requestAnimationFrame(loop)
+    requestAnimationFrame(loop) // todo 120fps too fast?
 }
 
 function gotResults(err, result) {
     if (err) {
-        console.log(err)
+        console.error(err)
         return
     }
 
@@ -136,6 +116,7 @@ function gotResults(err, result) {
 function drawBox(detections) {
     for (let i = 0; i < detections.length; i += 1) {
         const alignedRect = detections[i].alignedRect
+
         const x = alignedRect._box._x
         const y = alignedRect._box._y
         const boxWidth = alignedRect._box._width
@@ -150,6 +131,7 @@ function drawBox(detections) {
 }
 
 function drawLandmarks(detections) {
+    console.log(detections)
     for (let i = 0; i < detections.length; i += 1) {
         const mouth = detections[i].parts.mouth
         const nose = detections[i].parts.nose
@@ -158,7 +140,7 @@ function drawLandmarks(detections) {
         const rightEyeBrow = detections[i].parts.rightEyeBrow
         const leftEyeBrow = detections[i].parts.leftEyeBrow
 
-        checkSentiment(mouth)
+        sendNewSentiment(mouth)
         drawPart(mouth, true, getSentimentColor(mouth))
         // drawPart(nose, false)
         // drawPart(leftEye, true)
@@ -168,8 +150,9 @@ function drawLandmarks(detections) {
     }
 }
 
-function drawPart(feature, closed, color = blue) {
+function drawPart(feature, closed, color = "blue") {
     ctx.beginPath()
+    ctx.lineWidth = 2
     for (let i = 0; i < feature.length; i += 1) {
         const x = feature[i]._x
         const y = feature[i]._y
@@ -189,22 +172,26 @@ function drawPart(feature, closed, color = blue) {
     }
     ctx.strokeStyle = color
     ctx.stroke()
-    // console.log(canvas.toDataURL())
 }
 
-function getSentimentColor(facePart) {
+function isHappy(mouth) {
     // facePart[0] = outside left corner
     // facePart[6] = outside right corner
     // facePart[12] = inside left corner
     // facePart[16] = insode right corner
-    return (facePart[0]._y < facePart[12]._y || facePart[6]._y < facePart[16]._y) ? "green" : "red"
+    return (mouth[0]._y < mouth[12]._y || mouth[6]._y < mouth[16]._y)
 }
-function checkSentiment(facePart) {
-    let newSentiment = (facePart[0]._y < facePart[12]._y || facePart[6]._y < facePart[16]._y) ? "happy" : "sad"
+
+function getSentimentColor(mouth) {
+    return isHappy(mouth) ? "green" : "red"
+}
+function sendNewSentiment(mouth) {
+    let newSentiment = isHappy(mouth) ? "happy" : "sad"
     if (newSentiment !== sentiment) {
         sentiment = newSentiment
-        document.querySelector("#sentiment").innerHTML = `Your mood is ${sentiment}`
-        console.log(sentiment)
+
+        userEmoji.innerText = (sentiment === "happy") ? emoji[0] : emoji[1]
+        // console.log(sentiment)
         socket.sendSentiment(sentiment)
     }
 }
@@ -214,9 +201,54 @@ function createCanvas(w, h) {
     const canvas = document.createElement("canvas")
     canvas.width = w
     canvas.height = h
-    canvas.style.position = "absolute"
-
-    document.querySelector(".video-wrapper").appendChild(canvas)
+    canvas.id = "drawingcanvas"
+    videoWrapper.appendChild(canvas)
     // document.body.appendChild(canvas)
     return canvas
 }
+
+// login button
+function addClientToServer(e) {
+    e.preventDefault()
+    let name = document.querySelector("#login-name").value
+    if (name === "") {
+        name = "Anonymous"
+    }
+
+    loginView.style.display = "none"
+    userView.style.display = "flex"
+    userName.innerText = name
+
+    // add client to server
+    socket.addClient(name)
+        .then(() => {
+            console.log("client added")
+        })
+
+
+}
+
+function updateClientList(clients) {
+    students.innerHTML = ""
+    clients.forEach(client => {
+        addStudent(client.name, client.sentiment)
+    })
+}
+
+/**
+ * Clone template and add to DOM
+ * @param {string} name 
+ * @param {*} emo 
+ */
+function addStudent(name, emo) {
+    console.log("emo ", emo)
+    emo = (emo === "happy") ? emoji[0] : emoji[1]
+    const temp = document.querySelector("template")
+    const student = temp.content.cloneNode(true)
+    student.querySelector(".name").innerText = name
+    student.querySelector(".emoji").innerText = emo
+    students.appendChild(student)
+
+}
+
+startFaceAPI()

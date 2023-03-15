@@ -3,9 +3,9 @@ export default class Socket {
         this.host = "https://sandbox.cmgt.hr.nl:8000"
         // this.host = "localhost:8000"
 
-        this.addPlayerElement = document.querySelector("#add-player")
-        this.playerInfo = document.querySelector("#player-info")
-        this.addPlayerElement.querySelector("button").addEventListener("click", () => this.addPlayer())
+        // custom Event for updating clients in de frontend
+        this.updateClientsEvent = new Event("updateClients")
+
         // Socket setup
         console.log("Trying to connect to socket server")
         this.socket = io(this.host, {
@@ -21,38 +21,51 @@ export default class Socket {
             console.log(`connect_error due to ${err.message}`)
         })
 
-        this.socket.on("update", (happiness) => {
-            document.querySelector("#players-sentiment").innerHTML = happiness
+        this.socket.on("update", (happiness, numberOfClients) =>
+            this.updateStatus(happiness, numberOfClients))
+
+        // disconnect from server
+        this.socket.on("disconnect", () => {
+            console.log("Disconnected from server")
         })
     }
 
-    addPlayer() {
-        if (document.querySelector("#player-name").value === "") {
-            addPlayerElement.querySelector("error").style.display = "block"
-            return
-        }
-        const playerName = document.querySelector("#player-name").value
-        console.log("Adding player " + playerName)
-        this.socket.emit("new player", { id: this.socket.id, name: playerName }, (response) => {
-            console.log(response.message)
+    /**
+     * Add client to the server
+     * @param {string} clientName 
+     * @returns {Promise<string>} message
+     */
+    async addClient(clientName) {
+        await this.socket.emit("new client", clientName, (error, response) => {
+            if (error) {
+                return error
+            } else {
+                console.log(response.message)
+                return response.message
+            }
         })
-        this.addPlayerElement.style.display = "none"
-
-        // show player info
-        this.playerInfo.querySelector("h2").innerHTML = `Hi ${playerName}`
-        this.playerInfo.style.display = "block"
     }
 
+    updateStatus(happiness, clients) {
+        // console.log(happiness, numberOfClients)
+        document.querySelector("#clients-sentiment").innerHTML = happiness
+        document.querySelector("#amount").innerHTML = clients.length
+        this.updateClientsEvent.clients = clients
+        document.dispatchEvent(this.updateClientsEvent)
+    }
+
+    /**
+     * Send the sentiment to the server
+     */
     sendSentiment(sentiment) {
-        this.socket.emit("sentiment", this.socket.id, sentiment, (response) => {
-            console.log(response.message)
-        })
+        this.socket.emit("sentiment", sentiment)
     }
 
-    pictureFound() {
-        // send "found picture" event to server and receive response in callback
-        this.socket.emit("found picture", { name: "updated" }, (response) => {
-            console.log(response.status) // ok
-        })
+    /**
+     * disconnect the client from the server
+     */
+    disconnect() {
+        this.socket.disconnect()
+        window.location.reload()
     }
 }

@@ -12,32 +12,53 @@
     <script defer src="./js/main.js" type="module"></script>
 
     <link rel="stylesheet" href="./css/style.css">
-    <title>Code voorbeeld ML5</title>
+    <title>Student Sentiment</title>
 </head>
 
 <body>
-    <div id="add-player">
-        <div>
-            <label for="player-name">Player name</label>
-            <input id="player-name" type="text" placeholder="Your player name" />
-        </div>
-        <error style="display: none">
-            <span style="color: red;">Please enter a player name</span>
-        </error>
-        <div>
-            <button>Add Player</button>
-        </div>
-    </div>
-    <div id="player-info" style="display: none">
-        <h2></h2>
-    </div>
+    <main>
+        <header>
+            <div id="thumbnail">
+                <div id="videobackground">
+                    <div id="video-wrapper">
+                        <video id="video" width="320" height="240"></video>
+                    </div>
+                    <div id="login">
+                        <form action="">
+                            <input id="login-name" type="text" maxlength="12" placeholder="Naam" />
+                            <button>Join</button>
+                        </form>
+                    </div>
+                    <div id="user">
+                        <div id="username">Erik</div>
+                        <div id="useremoji">😬</div>
+                    </div>
+                    <error>
+                        Please enter a player name
+                    </error>
+                </div>
+            </div>
+            <div id="title">Student Sentiment</div>
+            <div>
+                <div>👤 : <span id="amount">0</span></div>
+                <div>😃 : <span id="clients-sentiment">0%</span></div>
+            </div>
+        </header>
+        <students>
+        </students>
+    </main>
 
-    <h3 id="players-sentiment">Percentage of happiness</h3>
-    <h2 id="sentiment">Your mood is neutral</h2>
+    <footer>
+        <div id="logo"><img src="./images/cmgt_logo.webp"></div>
+    </footer>
 
-    <div class="video-wrapper">
-        <video id="video" width="1280" height="720" autoplay muted></video>
-    </div>
+    <template>
+        <div class="student">
+            <div class="emoji">😭</div>
+            <div class="name">Bob</div>
+        </div>
+    </template>
+
 </body>
 
 </html>
