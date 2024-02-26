@@ -11,7 +11,7 @@ import Client from "./client.js";
 import { log } from "console";
 
 const host = DEBUG ? "localhost" : "sandbox.cmgt.hr.nl";
-const serverPort = 8000;
+const serverPort = 8100;
 let server = null;
 let percentageHappy = 0;
 
