@@ -1,5 +1,6 @@
 console.log("Starting socket server");
-const DEBUG = process.argv[2] === "-d";
+const args = process.argv[2] === "-d" ? true : false;
+const DEBUG = args;
 console.log("Debug is " + DEBUG);
 // import http and socket.io
 import { createServer } from "http";

@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch ./js/socket-server.js -d",
-    "start": "node --watch ./js/socket-server.js"
+    "start": "node --watch ./js/socket-server.js -l"
   },
   "author": "",
   "license": "ISC",
