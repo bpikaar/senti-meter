@@ -5,7 +5,9 @@
   "main": "js/socket-server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch ./js/socket-server.js -d",
+    "start": "node --watch ./js/socket-server.js"
   },
   "author": "",
   "license": "ISC",

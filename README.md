@@ -23,7 +23,8 @@ Install the dependencies and start the Socket.io server.
 ```bash
 cd server
 npm i
-node ./server/js/server.js
+npm run dev # for development
+npm run start # for production
 ```
 
 # Demo
