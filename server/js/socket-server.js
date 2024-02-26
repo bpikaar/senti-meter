@@ -10,8 +10,8 @@ import { readFileSync } from "fs";
 import Client from "./client.js";
 import { log } from "console";
 
-const host = DEBUG ? "localhost" : "sandbox.cmgt.hr.nl";
-const serverPort = 8000;
+const host = DEBUG ? "localhost" : "programmeren9.cmgt.hr.nl";
+const serverPort = 8100;
 let server = null;
 let percentageHappy = 0;
 
@@ -32,8 +32,10 @@ if (DEBUG) {
 } else {
     console.log("Creating secure server");
     server = createSecureServer({
-        key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
-        cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
+	key: readFileSync("/etc/ssl/private/key-programmeren9.cmgt.hr.nl.pem"),
+        cert: readFileSync("/etc/ssl/certs/programmeren9.cmgt.hr.nl.cert")
+        //key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
+        //cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
     }, (req, res) => {
         console.log("Secure Server created");
         res.writeHead(200);
