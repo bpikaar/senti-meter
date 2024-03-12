@@ -164,4 +164,7 @@ students {
     #videobackground {
         width: 70vw;
     }
+    #qr-code {
+        display: none;
+    }
 }
