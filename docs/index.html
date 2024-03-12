@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
-        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
-        crossorigin="anonymous"></script>
+            integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+            crossorigin="anonymous"></script>
     <script defer src="./js/main.js" type="module"></script>
 
     <link rel="stylesheet" href="./css/style.css">
@@ -16,48 +16,378 @@
 </head>
 
 <body>
-    <main>
-        <header>
-            <div id="thumbnail">
-                <div id="videobackground">
-                    <div id="video-wrapper">
-                        <video id="video" width="320" height="240"></video>
-                    </div>
-                    <div id="login">
-                        <form action="">
-                            <input id="login-name" type="text" maxlength="12" placeholder="Naam" />
-                            <button>Join</button>
-                        </form>
-                    </div>
-                    <div id="user">
-                        <div id="username">Erik</div>
-                        <div id="useremoji">😬</div>
-                    </div>
-                    <error>
-                        Please enter a player name
-                    </error>
+<main>
+    <header>
+        <div id="thumbnail">
+            <div id="videobackground">
+                <div id="video-wrapper">
+                    <video id="video" width="320" height="240"></video>
                 </div>
+                <div id="login">
+                    <form action="">
+                        <input id="login-name" type="text" maxlength="12" placeholder="Naam"/>
+                        <button>Join</button>
+                    </form>
+                </div>
+                <div id="user">
+                    <div id="username">Erik</div>
+                    <div id="useremoji">😬</div>
+                </div>
+                <error>
+                    Please enter a player name
+                </error>
             </div>
-            <div id="title">Student Sentiment</div>
-            <div>
-                <div>👤 : <span id="amount">0</span></div>
-                <div>😃 : <span id="clients-sentiment">0%</span></div>
-            </div>
-        </header>
-        <students>
-        </students>
-    </main>
-
-    <footer>
-        <div id="logo"><img src="./images/cmgt_logo.webp"></div>
-    </footer>
-
-    <template>
-        <div class="student">
-            <div class="emoji">😭</div>
-            <div class="name">Bob</div>
         </div>
-    </template>
+
+        <div id="title">Student Sentiment</div>
+        <div>
+            <div>👤 : <span id="amount">0</span></div>
+            <div>😃 : <span id="clients-sentiment">0%</span></div>
+        </div>
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                 width="320px" height="320px" viewBox="0 0 320 320">
+                <defs>
+                    <rect id="block" width="12" height="12" fill="#000000" fill-opacity="1"/>
+                </defs>
+                <rect x="0" y="0" width="320" height="320" fill="#ffffff" fill-opacity="1"/>
+                <use x="10" y="10" xlink:href="#block"/>
+                <use x="22" y="10" xlink:href="#block"/>
+                <use x="34" y="10" xlink:href="#block"/>
+                <use x="46" y="10" xlink:href="#block"/>
+                <use x="58" y="10" xlink:href="#block"/>
+                <use x="70" y="10" xlink:href="#block"/>
+                <use x="82" y="10" xlink:href="#block"/>
+                <use x="118" y="10" xlink:href="#block"/>
+                <use x="190" y="10" xlink:href="#block"/>
+                <use x="226" y="10" xlink:href="#block"/>
+                <use x="238" y="10" xlink:href="#block"/>
+                <use x="250" y="10" xlink:href="#block"/>
+                <use x="262" y="10" xlink:href="#block"/>
+                <use x="274" y="10" xlink:href="#block"/>
+                <use x="286" y="10" xlink:href="#block"/>
+                <use x="298" y="10" xlink:href="#block"/>
+                <use x="10" y="22" xlink:href="#block"/>
+                <use x="82" y="22" xlink:href="#block"/>
+                <use x="106" y="22" xlink:href="#block"/>
+                <use x="118" y="22" xlink:href="#block"/>
+                <use x="142" y="22" xlink:href="#block"/>
+                <use x="154" y="22" xlink:href="#block"/>
+                <use x="166" y="22" xlink:href="#block"/>
+                <use x="178" y="22" xlink:href="#block"/>
+                <use x="202" y="22" xlink:href="#block"/>
+                <use x="226" y="22" xlink:href="#block"/>
+                <use x="298" y="22" xlink:href="#block"/>
+                <use x="10" y="34" xlink:href="#block"/>
+                <use x="34" y="34" xlink:href="#block"/>
+                <use x="46" y="34" xlink:href="#block"/>
+                <use x="58" y="34" xlink:href="#block"/>
+                <use x="82" y="34" xlink:href="#block"/>
+                <use x="118" y="34" xlink:href="#block"/>
+                <use x="130" y="34" xlink:href="#block"/>
+                <use x="142" y="34" xlink:href="#block"/>
+                <use x="178" y="34" xlink:href="#block"/>
+                <use x="226" y="34" xlink:href="#block"/>
+                <use x="250" y="34" xlink:href="#block"/>
+                <use x="262" y="34" xlink:href="#block"/>
+                <use x="274" y="34" xlink:href="#block"/>
+                <use x="298" y="34" xlink:href="#block"/>
+                <use x="10" y="46" xlink:href="#block"/>
+                <use x="34" y="46" xlink:href="#block"/>
+                <use x="46" y="46" xlink:href="#block"/>
+                <use x="58" y="46" xlink:href="#block"/>
+                <use x="82" y="46" xlink:href="#block"/>
+                <use x="106" y="46" xlink:href="#block"/>
+                <use x="118" y="46" xlink:href="#block"/>
+                <use x="142" y="46" xlink:href="#block"/>
+                <use x="178" y="46" xlink:href="#block"/>
+                <use x="190" y="46" xlink:href="#block"/>
+                <use x="202" y="46" xlink:href="#block"/>
+                <use x="226" y="46" xlink:href="#block"/>
+                <use x="250" y="46" xlink:href="#block"/>
+                <use x="262" y="46" xlink:href="#block"/>
+                <use x="274" y="46" xlink:href="#block"/>
+                <use x="298" y="46" xlink:href="#block"/>
+                <use x="10" y="58" xlink:href="#block"/>
+                <use x="34" y="58" xlink:href="#block"/>
+                <use x="46" y="58" xlink:href="#block"/>
+                <use x="58" y="58" xlink:href="#block"/>
+                <use x="82" y="58" xlink:href="#block"/>
+                <use x="130" y="58" xlink:href="#block"/>
+                <use x="154" y="58" xlink:href="#block"/>
+                <use x="202" y="58" xlink:href="#block"/>
+                <use x="226" y="58" xlink:href="#block"/>
+                <use x="250" y="58" xlink:href="#block"/>
+                <use x="262" y="58" xlink:href="#block"/>
+                <use x="274" y="58" xlink:href="#block"/>
+                <use x="298" y="58" xlink:href="#block"/>
+                <use x="10" y="70" xlink:href="#block"/>
+                <use x="82" y="70" xlink:href="#block"/>
+                <use x="106" y="70" xlink:href="#block"/>
+                <use x="130" y="70" xlink:href="#block"/>
+                <use x="166" y="70" xlink:href="#block"/>
+                <use x="226" y="70" xlink:href="#block"/>
+                <use x="298" y="70" xlink:href="#block"/>
+                <use x="10" y="82" xlink:href="#block"/>
+                <use x="22" y="82" xlink:href="#block"/>
+                <use x="34" y="82" xlink:href="#block"/>
+                <use x="46" y="82" xlink:href="#block"/>
+                <use x="58" y="82" xlink:href="#block"/>
+                <use x="70" y="82" xlink:href="#block"/>
+                <use x="82" y="82" xlink:href="#block"/>
+                <use x="106" y="82" xlink:href="#block"/>
+                <use x="130" y="82" xlink:href="#block"/>
+                <use x="154" y="82" xlink:href="#block"/>
+                <use x="178" y="82" xlink:href="#block"/>
+                <use x="202" y="82" xlink:href="#block"/>
+                <use x="226" y="82" xlink:href="#block"/>
+                <use x="238" y="82" xlink:href="#block"/>
+                <use x="250" y="82" xlink:href="#block"/>
+                <use x="262" y="82" xlink:href="#block"/>
+                <use x="274" y="82" xlink:href="#block"/>
+                <use x="286" y="82" xlink:href="#block"/>
+                <use x="298" y="82" xlink:href="#block"/>
+                <use x="154" y="94" xlink:href="#block"/>
+                <use x="178" y="94" xlink:href="#block"/>
+                <use x="10" y="106" xlink:href="#block"/>
+                <use x="22" y="106" xlink:href="#block"/>
+                <use x="34" y="106" xlink:href="#block"/>
+                <use x="46" y="106" xlink:href="#block"/>
+                <use x="58" y="106" xlink:href="#block"/>
+                <use x="82" y="106" xlink:href="#block"/>
+                <use x="94" y="106" xlink:href="#block"/>
+                <use x="106" y="106" xlink:href="#block"/>
+                <use x="118" y="106" xlink:href="#block"/>
+                <use x="130" y="106" xlink:href="#block"/>
+                <use x="154" y="106" xlink:href="#block"/>
+                <use x="166" y="106" xlink:href="#block"/>
+                <use x="178" y="106" xlink:href="#block"/>
+                <use x="190" y="106" xlink:href="#block"/>
+                <use x="214" y="106" xlink:href="#block"/>
+                <use x="238" y="106" xlink:href="#block"/>
+                <use x="262" y="106" xlink:href="#block"/>
+                <use x="286" y="106" xlink:href="#block"/>
+                <use x="10" y="118" xlink:href="#block"/>
+                <use x="22" y="118" xlink:href="#block"/>
+                <use x="58" y="118" xlink:href="#block"/>
+                <use x="118" y="118" xlink:href="#block"/>
+                <use x="190" y="118" xlink:href="#block"/>
+                <use x="202" y="118" xlink:href="#block"/>
+                <use x="214" y="118" xlink:href="#block"/>
+                <use x="238" y="118" xlink:href="#block"/>
+                <use x="250" y="118" xlink:href="#block"/>
+                <use x="298" y="118" xlink:href="#block"/>
+                <use x="10" y="130" xlink:href="#block"/>
+                <use x="34" y="130" xlink:href="#block"/>
+                <use x="58" y="130" xlink:href="#block"/>
+                <use x="70" y="130" xlink:href="#block"/>
+                <use x="82" y="130" xlink:href="#block"/>
+                <use x="94" y="130" xlink:href="#block"/>
+                <use x="106" y="130" xlink:href="#block"/>
+                <use x="118" y="130" xlink:href="#block"/>
+                <use x="142" y="130" xlink:href="#block"/>
+                <use x="154" y="130" xlink:href="#block"/>
+                <use x="166" y="130" xlink:href="#block"/>
+                <use x="178" y="130" xlink:href="#block"/>
+                <use x="214" y="130" xlink:href="#block"/>
+                <use x="226" y="130" xlink:href="#block"/>
+                <use x="250" y="130" xlink:href="#block"/>
+                <use x="274" y="130" xlink:href="#block"/>
+                <use x="34" y="142" xlink:href="#block"/>
+                <use x="94" y="142" xlink:href="#block"/>
+                <use x="106" y="142" xlink:href="#block"/>
+                <use x="118" y="142" xlink:href="#block"/>
+                <use x="130" y="142" xlink:href="#block"/>
+                <use x="142" y="142" xlink:href="#block"/>
+                <use x="166" y="142" xlink:href="#block"/>
+                <use x="202" y="142" xlink:href="#block"/>
+                <use x="10" y="154" xlink:href="#block"/>
+                <use x="34" y="154" xlink:href="#block"/>
+                <use x="46" y="154" xlink:href="#block"/>
+                <use x="58" y="154" xlink:href="#block"/>
+                <use x="82" y="154" xlink:href="#block"/>
+                <use x="106" y="154" xlink:href="#block"/>
+                <use x="118" y="154" xlink:href="#block"/>
+                <use x="142" y="154" xlink:href="#block"/>
+                <use x="190" y="154" xlink:href="#block"/>
+                <use x="214" y="154" xlink:href="#block"/>
+                <use x="226" y="154" xlink:href="#block"/>
+                <use x="238" y="154" xlink:href="#block"/>
+                <use x="250" y="154" xlink:href="#block"/>
+                <use x="262" y="154" xlink:href="#block"/>
+                <use x="286" y="154" xlink:href="#block"/>
+                <use x="298" y="154" xlink:href="#block"/>
+                <use x="10" y="166" xlink:href="#block"/>
+                <use x="22" y="166" xlink:href="#block"/>
+                <use x="34" y="166" xlink:href="#block"/>
+                <use x="58" y="166" xlink:href="#block"/>
+                <use x="70" y="166" xlink:href="#block"/>
+                <use x="130" y="166" xlink:href="#block"/>
+                <use x="154" y="166" xlink:href="#block"/>
+                <use x="202" y="166" xlink:href="#block"/>
+                <use x="214" y="166" xlink:href="#block"/>
+                <use x="226" y="166" xlink:href="#block"/>
+                <use x="238" y="166" xlink:href="#block"/>
+                <use x="250" y="166" xlink:href="#block"/>
+                <use x="298" y="166" xlink:href="#block"/>
+                <use x="10" y="178" xlink:href="#block"/>
+                <use x="34" y="178" xlink:href="#block"/>
+                <use x="70" y="178" xlink:href="#block"/>
+                <use x="82" y="178" xlink:href="#block"/>
+                <use x="94" y="178" xlink:href="#block"/>
+                <use x="166" y="178" xlink:href="#block"/>
+                <use x="178" y="178" xlink:href="#block"/>
+                <use x="214" y="178" xlink:href="#block"/>
+                <use x="226" y="178" xlink:href="#block"/>
+                <use x="250" y="178" xlink:href="#block"/>
+                <use x="274" y="178" xlink:href="#block"/>
+                <use x="286" y="178" xlink:href="#block"/>
+                <use x="298" y="178" xlink:href="#block"/>
+                <use x="10" y="190" xlink:href="#block"/>
+                <use x="46" y="190" xlink:href="#block"/>
+                <use x="58" y="190" xlink:href="#block"/>
+                <use x="94" y="190" xlink:href="#block"/>
+                <use x="106" y="190" xlink:href="#block"/>
+                <use x="154" y="190" xlink:href="#block"/>
+                <use x="202" y="190" xlink:href="#block"/>
+                <use x="286" y="190" xlink:href="#block"/>
+                <use x="298" y="190" xlink:href="#block"/>
+                <use x="10" y="202" xlink:href="#block"/>
+                <use x="46" y="202" xlink:href="#block"/>
+                <use x="58" y="202" xlink:href="#block"/>
+                <use x="82" y="202" xlink:href="#block"/>
+                <use x="106" y="202" xlink:href="#block"/>
+                <use x="118" y="202" xlink:href="#block"/>
+                <use x="130" y="202" xlink:href="#block"/>
+                <use x="154" y="202" xlink:href="#block"/>
+                <use x="166" y="202" xlink:href="#block"/>
+                <use x="190" y="202" xlink:href="#block"/>
+                <use x="202" y="202" xlink:href="#block"/>
+                <use x="214" y="202" xlink:href="#block"/>
+                <use x="226" y="202" xlink:href="#block"/>
+                <use x="238" y="202" xlink:href="#block"/>
+                <use x="250" y="202" xlink:href="#block"/>
+                <use x="262" y="202" xlink:href="#block"/>
+                <use x="298" y="202" xlink:href="#block"/>
+                <use x="106" y="214" xlink:href="#block"/>
+                <use x="130" y="214" xlink:href="#block"/>
+                <use x="178" y="214" xlink:href="#block"/>
+                <use x="190" y="214" xlink:href="#block"/>
+                <use x="202" y="214" xlink:href="#block"/>
+                <use x="250" y="214" xlink:href="#block"/>
+                <use x="298" y="214" xlink:href="#block"/>
+                <use x="10" y="226" xlink:href="#block"/>
+                <use x="22" y="226" xlink:href="#block"/>
+                <use x="34" y="226" xlink:href="#block"/>
+                <use x="46" y="226" xlink:href="#block"/>
+                <use x="58" y="226" xlink:href="#block"/>
+                <use x="70" y="226" xlink:href="#block"/>
+                <use x="82" y="226" xlink:href="#block"/>
+                <use x="106" y="226" xlink:href="#block"/>
+                <use x="142" y="226" xlink:href="#block"/>
+                <use x="154" y="226" xlink:href="#block"/>
+                <use x="202" y="226" xlink:href="#block"/>
+                <use x="226" y="226" xlink:href="#block"/>
+                <use x="250" y="226" xlink:href="#block"/>
+                <use x="274" y="226" xlink:href="#block"/>
+                <use x="286" y="226" xlink:href="#block"/>
+                <use x="298" y="226" xlink:href="#block"/>
+                <use x="10" y="238" xlink:href="#block"/>
+                <use x="82" y="238" xlink:href="#block"/>
+                <use x="118" y="238" xlink:href="#block"/>
+                <use x="130" y="238" xlink:href="#block"/>
+                <use x="142" y="238" xlink:href="#block"/>
+                <use x="202" y="238" xlink:href="#block"/>
+                <use x="250" y="238" xlink:href="#block"/>
+                <use x="262" y="238" xlink:href="#block"/>
+                <use x="10" y="250" xlink:href="#block"/>
+                <use x="34" y="250" xlink:href="#block"/>
+                <use x="46" y="250" xlink:href="#block"/>
+                <use x="58" y="250" xlink:href="#block"/>
+                <use x="82" y="250" xlink:href="#block"/>
+                <use x="106" y="250" xlink:href="#block"/>
+                <use x="118" y="250" xlink:href="#block"/>
+                <use x="130" y="250" xlink:href="#block"/>
+                <use x="142" y="250" xlink:href="#block"/>
+                <use x="202" y="250" xlink:href="#block"/>
+                <use x="214" y="250" xlink:href="#block"/>
+                <use x="226" y="250" xlink:href="#block"/>
+                <use x="238" y="250" xlink:href="#block"/>
+                <use x="250" y="250" xlink:href="#block"/>
+                <use x="262" y="250" xlink:href="#block"/>
+                <use x="10" y="262" xlink:href="#block"/>
+                <use x="34" y="262" xlink:href="#block"/>
+                <use x="46" y="262" xlink:href="#block"/>
+                <use x="58" y="262" xlink:href="#block"/>
+                <use x="82" y="262" xlink:href="#block"/>
+                <use x="106" y="262" xlink:href="#block"/>
+                <use x="130" y="262" xlink:href="#block"/>
+                <use x="154" y="262" xlink:href="#block"/>
+                <use x="166" y="262" xlink:href="#block"/>
+                <use x="190" y="262" xlink:href="#block"/>
+                <use x="202" y="262" xlink:href="#block"/>
+                <use x="214" y="262" xlink:href="#block"/>
+                <use x="226" y="262" xlink:href="#block"/>
+                <use x="250" y="262" xlink:href="#block"/>
+                <use x="286" y="262" xlink:href="#block"/>
+                <use x="298" y="262" xlink:href="#block"/>
+                <use x="10" y="274" xlink:href="#block"/>
+                <use x="34" y="274" xlink:href="#block"/>
+                <use x="46" y="274" xlink:href="#block"/>
+                <use x="58" y="274" xlink:href="#block"/>
+                <use x="82" y="274" xlink:href="#block"/>
+                <use x="106" y="274" xlink:href="#block"/>
+                <use x="166" y="274" xlink:href="#block"/>
+                <use x="178" y="274" xlink:href="#block"/>
+                <use x="190" y="274" xlink:href="#block"/>
+                <use x="226" y="274" xlink:href="#block"/>
+                <use x="250" y="274" xlink:href="#block"/>
+                <use x="274" y="274" xlink:href="#block"/>
+                <use x="298" y="274" xlink:href="#block"/>
+                <use x="10" y="286" xlink:href="#block"/>
+                <use x="82" y="286" xlink:href="#block"/>
+                <use x="106" y="286" xlink:href="#block"/>
+                <use x="118" y="286" xlink:href="#block"/>
+                <use x="154" y="286" xlink:href="#block"/>
+                <use x="166" y="286" xlink:href="#block"/>
+                <use x="214" y="286" xlink:href="#block"/>
+                <use x="226" y="286" xlink:href="#block"/>
+                <use x="238" y="286" xlink:href="#block"/>
+                <use x="250" y="286" xlink:href="#block"/>
+                <use x="262" y="286" xlink:href="#block"/>
+                <use x="286" y="286" xlink:href="#block"/>
+                <use x="10" y="298" xlink:href="#block"/>
+                <use x="22" y="298" xlink:href="#block"/>
+                <use x="34" y="298" xlink:href="#block"/>
+                <use x="46" y="298" xlink:href="#block"/>
+                <use x="58" y="298" xlink:href="#block"/>
+                <use x="70" y="298" xlink:href="#block"/>
+                <use x="82" y="298" xlink:href="#block"/>
+                <use x="106" y="298" xlink:href="#block"/>
+                <use x="118" y="298" xlink:href="#block"/>
+                <use x="154" y="298" xlink:href="#block"/>
+                <use x="178" y="298" xlink:href="#block"/>
+                <use x="214" y="298" xlink:href="#block"/>
+                <use x="274" y="298" xlink:href="#block"/>
+                <use x="286" y="298" xlink:href="#block"/>
+                <use x="298" y="298" xlink:href="#block"/>
+            </svg>
+        </div>
+    </header>
+    <students>
+    </students>
+</main>
+
+<footer>
+    <div id="logo"><img src="./images/cmgt_logo.webp"></div>
+</footer>
+
+<template>
+    <div class="student">
+        <div class="emoji">😭</div>
+        <div class="name">Bob</div>
+    </div>
+</template>
 
 </body>
 
