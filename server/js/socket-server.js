@@ -10,7 +10,8 @@ import { readFileSync } from "fs";
 import Client from "./client.js";
 import { log } from "console";
 
-const host = DEBUG ? "localhost" : "programmeren9.cmgt.hr.nl";
+// const host = DEBUG ? "localhost" : "programmeren9.cmgt.hr.nl";
+const host = DEBUG ? "localhost" : "145.24.223.170";
 const serverPort = 8100;
 let server = null;
 let percentageHappy = 0;
@@ -22,6 +23,7 @@ if (process.argv.length === 2) {
     process.exit(1);
 }
 
+// if (DEBUG) {
 if (DEBUG) {
     console.log("Creating server");
     server = createServer({}, (req, res) => {
@@ -64,7 +66,6 @@ io.on("connection", (socket) => {
         callback({
             message: `Client ${clientName} added.`
         });
-        console.log(clients);
         startUpdateClients(socket);
     });
 
@@ -103,7 +104,7 @@ function updateClients() {
     if (clients.length !== 0) {
         // calculate percentage of happy clients
         percentageHappy = clients.filter(client =>
-            client.sentiment === "happy").length / clients.length;
+            client.getSentimentNumber() >= 3).length / clients.length;
         console.log(clients.filter(client => client.sentiment === "happy").length);
     } else { percentageHappy = 0; }
 
@@ -117,5 +118,4 @@ function disconnectClient(socket) {
     // remove client from clients array
     clients = clients.filter(client => client.id !== socket.id);
     console.log("Client disconnected");
-    console.log(clients);
 }

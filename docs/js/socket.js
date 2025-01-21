@@ -1,8 +1,8 @@
 export default class Socket {
     constructor() {
-        //this.host = "https://sandbox.cmgt.hr.nl:8000"
-        //this.host = "localhost:8000";
-	this.host = "https://programmeren9.cmgt.hr.nl:8100";
+        this.host = "https://sandbox.cmgt.hr.nl:8100"
+        // this.host = "localhost:8100";
+        // this.host = "https://programmeren9.cmgt.hr.nl:8100";
 
         // custom Event for updating clients in de frontend
         this.updateClientsEvent = new Event("updateClients");
@@ -22,8 +22,9 @@ export default class Socket {
             console.log(`connect_error due to ${err.message}`);
         });
 
-        this.socket.on("update", (happiness, numberOfClients) =>
-            this.updateStatus(happiness, numberOfClients));
+        this.socket.on("update", (happiness, numberOfClients) => {
+            this.updateStatus(happiness, numberOfClients);
+        });
 
         // disconnect from server
         this.socket.on("disconnect", () => {

@@ -38,6 +38,21 @@ production: `npm run start`
 ## client
 
 *Server for client-side*
+
+### Node server
+
+https://www.npmjs.com/package/http-server
+
+**Globally via npm**
+```bash
+  npm install --global http-server 
+```
+run 
+```bash
+  http-server
+```
+
+### Python server
 ```python
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from ssl import PROTOCOL_TLS_SERVER, SSLContext
