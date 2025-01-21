@@ -4,3 +4,8 @@
 .vscode
 .idea
 
+# ignore node_modules
+node_modules
+
+# ignore build
+dist
