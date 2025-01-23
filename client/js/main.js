@@ -32,7 +32,7 @@ const height = 240;
 // const width = 1280
 // const height = 720
 let canSend = false;
-let canvas, ctx, faceapi, drawingUtils;
+let canvas, ctx, drawingUtils;
 let currentSentiment = "😐";
 let initialized = false;
 
