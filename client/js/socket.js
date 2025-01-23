@@ -10,7 +10,7 @@ export default class Socket {
         // Socket setup
         console.log("Trying to connect to socket server");
         this.socket = io(this.host, {
-            // transports: ['websocket']
+            transports: ['websocket'] // only use websocket, because (connect_error due to xhr poll error)
         });
 
         // client-side
