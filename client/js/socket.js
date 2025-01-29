@@ -1,8 +1,8 @@
 export default class Socket {
     constructor() {
-        this.host = "http://sandbox.cmgt.hr.nl:8100"
+        // this.host = "http://sandbox.cmgt.hr.nl:8100"
         // this.host = "localhost:8100";
-        // this.host = "https://programmeren9.cmgt.hr.nl:8100";
+        this.host = "https://programmeren9.cmgt.hr.nl:8100";
 
         // custom Event for updating clients in de frontend
         this.updateClientsEvent = new Event("updateClients");

@@ -34,7 +34,7 @@ if (DEBUG) {
 } else {
     console.log("Creating secure server");
     server = createSecureServer({
-	key: readFileSync("/etc/ssl/private/key-programmeren9.cmgt.hr.nl.pem"),
+	    key: readFileSync("/etc/ssl/private/key-programmeren9.cmgt.hr.nl.pem"),
         cert: readFileSync("/etc/ssl/certs/programmeren9.cmgt.hr.nl.cert")
         //key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
         //cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
