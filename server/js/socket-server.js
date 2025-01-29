@@ -8,8 +8,8 @@ import Client from "./client.js";
 import { log } from "console";
 
 console.log("Starting socket server");
-const args = process.argv[2] === "-d" ? true : false;
-const DEBUG = process.env.DEBUG || args;
+// const args = process.argv[2] === "-d" ? true : false;
+const DEBUG = process.env.DEBUG === 'true';
 console.log("Debug is " + DEBUG);
 
 const host = DEBUG ? "localhost" : process.env.HOST;
