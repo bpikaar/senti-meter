@@ -1,8 +1,5 @@
-console.log("Starting socket server");
-const args = process.argv[2] === "-d" ? true : false;
-const DEBUG = args;
-console.log("Debug is " + DEBUG);
 // import http and socket.io
+import 'dotenv/config'
 import { createServer } from "http";
 import { createServer as createSecureServer } from "https";
 import { Server } from "socket.io";
@@ -10,9 +7,13 @@ import { readFileSync } from "fs";
 import Client from "./client.js";
 import { log } from "console";
 
-// const host = DEBUG ? "localhost" : "programmeren9.cmgt.hr.nl";
-const host = DEBUG ? "localhost" : "145.24.223.170";
-const serverPort = 8100;
+console.log("Starting socket server");
+const args = process.argv[2] === "-d" ? true : false;
+const DEBUG = process.env.DEBUG || args;
+console.log("Debug is " + DEBUG);
+
+const host = DEBUG ? "localhost" : process.env.HOST;
+const serverPort = process.env.PORT;
 let server = null;
 let percentageHappy = 0;
 
@@ -34,8 +35,8 @@ if (DEBUG) {
 } else {
     console.log("Creating secure server");
     server = createSecureServer({
-	    key: readFileSync("/etc/ssl/private/key-programmeren9.cmgt.hr.nl.pem"),
-        cert: readFileSync("/etc/ssl/certs/programmeren9.cmgt.hr.nl.cert")
+	    key: readFileSync(process.env.PRIVATE_KEY),
+        cert: readFileSync(process.env.CERTIFICATE)
         //key: readFileSync("/etc/ssl/private/sandbox_cmgt_hr_nl.key"),
         //cert: readFileSync("/etc/ssl/certs/sandbox_cmgt_hr_nl.cer")
     }, (req, res) => {
@@ -84,9 +85,9 @@ io.on("connection", (socket) => {
 
 });
 
-console.log("Listening on port " + serverPort + "");
+console.log("Listening on " + host + ":" + serverPort + "");
 server.listen(serverPort, host, () => {
-    console.log("Server listening on port " + serverPort + "");
+    console.log("Server Listening on " + host + ":" + serverPort + "");
 });
 
 function startUpdateClients(socket) {

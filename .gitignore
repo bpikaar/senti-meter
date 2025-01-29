@@ -1,5 +1,8 @@
 .DS_Store
 
+# settings
+.env
+
 # ignore idea 
 .vscode
 .idea

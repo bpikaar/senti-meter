@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "socket.io": "^4.6.2"
   }
 }
