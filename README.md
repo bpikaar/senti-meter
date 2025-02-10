@@ -51,6 +51,20 @@ run
 ```bash
   http-server
 ```
+Https server
+
+```bash
+sudo http-server -S -C /etc/ssl/certs/sandbox.cmgt.hr.nl.cert -K /etc/ssl/private/sandbox.cmgt.hr.key -p 443
+
+```
+
+-p 443 voor https port 
+
+-C voor cert
+
+-K voor private key
+
+met sudo uitvoeren voor toegang tot private key
 
 ### Python server
 ```python
